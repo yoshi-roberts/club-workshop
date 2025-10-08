@@ -1,4 +1,4 @@
-local enemy_new = require("enemies")
+local enemy = require("enemy")
 
 local spawner = {
 	rate = 600,
@@ -6,7 +6,9 @@ local spawner = {
 	spawned = 0,
 }
 
-function spawner.update(enemies)
+love.math.setRandomSeed(love.timer.getTime())
+
+function spawner.update()
 	spawner.timer = spawner.timer + 1
 
 	if spawner.timer >= spawner.rate then
@@ -20,18 +22,19 @@ function spawner.update(enemies)
 
 		local type = 1
 
-		if spawner.spawned >= 50 then
+		if spawner.spawned >= 35 then
 			spawner.rate = 240
 			type = love.math.random(2, 3)
-		elseif spawner.spawned >= 35 then
+		elseif spawner.spawned >= 25 then
 			spawner.rate = 360
 			type = love.math.random(1, 3)
-		elseif spawner.spawned >= 15 then
+		elseif spawner.spawned >= 10 then
 			spawner.rate = 480
 			type = love.math.random(1, 2)
 		end
 
-		table.insert(enemies, enemy_new(types[type]))
+		enemy.new(types[type])
+		spawner.spawned = spawner.spawned + 1
 	end
 end
 

@@ -1,5 +1,4 @@
-local bullet_sprite = love.graphics.newImage("assets/PNG/Lasers/laserBlue04.png")
-local bullet_sfx = love.audio.newSource("assets/Bonus/sfx_laser1.ogg", "static")
+local bullet = require("bullet")
 
 local player = {
 	x = 0,
@@ -8,6 +7,11 @@ local player = {
 	health = 100,
 	sprite = love.graphics.newImage("assets/PNG/playerShip2_blue.png"),
 }
+
+function player.init()
+	player.y = love.graphics.getHeight() - player.sprite:getHeight()
+	player.x = (love.graphics.getWidth() / 2) - (player.sprite:getWidth() / 2)
+end
 
 function player.update(dt)
 	if love.keyboard.isDown("a") then
@@ -25,11 +29,13 @@ end
 
 function love.keypressed(key)
 	if key == "space" then
-		local sfx = bullet_sfx:clone()
-		love.audio.play(sfx)
-		local bx = (player.x + (player.sprite:getWidth() / 2)) - (bullet_sprite:getWidth() / 2)
-		new_bullet(bx, player.y)
+		local bx = (player.x + (player.sprite:getWidth() / 2)) - (bullet.sprite:getWidth() / 2)
+		bullet.new(bx, player.y)
 	end
+end
+
+function player.draw()
+	love.graphics.draw(player.sprite, player.x, player.y)
 end
 
 return player
